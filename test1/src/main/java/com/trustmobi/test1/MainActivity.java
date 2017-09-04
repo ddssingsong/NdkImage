@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,9 +17,9 @@ import android.widget.TextView;
 
 import com.android.ndk.AlbumUtil;
 import com.android.ndk.ImageNativeUtil;
+import com.android.ndk.ImageTools;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 
 public class MainActivity extends Activity {
@@ -90,39 +89,38 @@ public class MainActivity extends Activity {
 
     }
 
-    Bitmap bitmap = null;
+    File file;
 
     private void uriToBitmap(final Uri uri) {
-        final String path = AlbumUtil.getRealPathFromUri(this, uri);
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-            image.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        text.setText("原图:" + getFormatSize(new File(path).length()));
+        String path = AlbumUtil.getRealPathFromUri(this, uri);
+        Log.i("dds", "图片路径" + path);
+        file = new File(path);
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        image.setImageBitmap(bitmap);
+        text.setText("原图:" + getFormatSize(file.length()));
 
     }
 
     public void compress(View view) {
-        if (bitmap == null) return;
+        if (file == null) return;
         new Thread(new Runnable() {
+
             @Override
             public void run() {
-                final File file2 = new File(Environment.getExternalStorageDirectory(), "ssss.jpg");
-                long result = ImageNativeUtil.compressBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 50,
-                        file2.getAbsolutePath().getBytes(), true);
-                Log.i("dds", "返回结果:" + result);
+                // 对文件进行操
+                final File file2 = new File(Environment.getExternalStorageDirectory(), "ddss.jpg");
+                long result = ImageNativeUtil.zoomcompress(file.getAbsolutePath().getBytes(), file2.getAbsolutePath().getBytes(), true, ImageTools.Quality.SMALL.getQuality());
+                Log.i("dds", "返回结果" + result);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         if (file2.exists()) {
                             Bitmap bitmap = BitmapFactory.decodeFile(file2.getAbsolutePath());
                             image.setImageBitmap(bitmap);
-                            text.setText("压缩过的图:" + getFormatSize(file2.length()));
+                            text.setText("压缩过的图：" + getFormatSize(file2.length()));
                         }
                     }
                 });
+
             }
         }).start();
     }

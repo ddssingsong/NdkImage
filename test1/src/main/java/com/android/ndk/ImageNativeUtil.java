@@ -17,8 +17,7 @@ public class ImageNativeUtil {
 
 	public static void compressBitmap(Bitmap bit, int quality, String fileName, boolean optimize, int level) {
 		if (bit.getConfig() != Config.ARGB_8888) {
-			Bitmap result = null;
-
+			Bitmap result;
 			result = Bitmap.createBitmap(bit.getWidth() / level, bit.getHeight() / level, Config.ARGB_8888);
 			Canvas canvas = new Canvas(result);
 			Rect rect = new Rect(0, 0, bit.getWidth() / level, bit.getHeight() / level);

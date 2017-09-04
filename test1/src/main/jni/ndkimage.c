@@ -144,7 +144,7 @@ int imageRule(int* tb_w, int *tb_h, int* q, int w, int h, int quality,
 	case 4:
 		*tb_w = 115;
 		*tb_h = 115;
-		*q = 10;
+		*q = 15;
 		break;
 	}
 	return 1;

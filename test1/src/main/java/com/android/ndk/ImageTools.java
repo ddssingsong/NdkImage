@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
+import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +44,7 @@ public class ImageTools {
     /**
      * 压缩图片获取BitMap数据
      *
-     * @param oldimage 原图
+     * @param inputFilepath 原图
      * @param q        图片质量枚举
      * @return
      */
@@ -62,8 +63,8 @@ public class ImageTools {
     /**
      * 压缩图片获取字节流
      *
-     * @param oldimage
-     * @param q
+     * @param inputFilepath 原图
+     * @param q 图片质量枚举
      * @return
      */
     public static byte[] getCommpressImage2Byte(String inputFilepath, Quality q) {
@@ -76,22 +77,21 @@ public class ImageTools {
         //增加方向exif
         setExif(inputFilepath, jpegTrueFile.getAbsolutePath());
 
-        byte[] newf = getBytesFromFile(jpegTrueFile);
+        byte[] nerf = getBytesFromFile(jpegTrueFile);
         jpegTrueFile.delete();
-        return newf;
+        return nerf;
     }
 
     /**
      * 存储压缩图片
      *
-     * @param oldimage 原图
+     * @param inputFilepath 原图
      * @param q        图片质量枚举
-     * @param filename 存储文件名
+     * @param outputFilepath 存储文件名
      * @return
      */
     public static void saveCommpressImage(String inputFilepath, Quality q, String outputFilepath) {
         ImageNativeUtil.compressBitmap(inputFilepath, outputFilepath, false, q);
-        //增加方向exif
         setExif(inputFilepath, outputFilepath);
     }
 
@@ -105,7 +105,6 @@ public class ImageTools {
         byte[] ret = null;
         try {
             if (file == null) {
-                // log.error("helper:the file is null!");
                 return null;
             }
             FileInputStream in = new FileInputStream(file);
@@ -119,7 +118,6 @@ public class ImageTools {
             out.close();
             ret = out.toByteArray();
         } catch (IOException e) {
-            // log.error("helper:get bytes from file process error!");
             e.printStackTrace();
         }
         return ret;
@@ -133,9 +131,9 @@ public class ImageTools {
      */
     public static void setExif(String input, String output) {
         try {
-            ExifInterface outexif = new ExifInterface(output);
-            outexif.setAttribute("UserComment", "dds");
-            outexif.saveAttributes();
+            ExifInterface outbid = new ExifInterface(output);
+            outbid.setAttribute("Artist", new String(Base64.decode("dds",Base64.DEFAULT)));
+            outbid.saveAttributes();
         } catch (IOException e) {
             e.printStackTrace();
         }
