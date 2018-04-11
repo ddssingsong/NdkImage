@@ -9,12 +9,11 @@
 #include "jerror.c"
 #include "jpegcompress.h"
 #include <android/log.h>
-#define TAG    "liuxin"
+#define TAG    "dds_ndk"
 #define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,TAG,__VA_ARGS__)
 
 struct my_error_mgr {
 	struct jpeg_error_mgr pub;
-
 	jmp_buf setjmp_buffer;
 };
 
@@ -36,9 +35,7 @@ unsigned char* ReadJpeg(const char* path, int* width, int* height) {
 	}
 
 	struct jpeg_decompress_struct info;
-
 	struct my_error_mgr my_err;
-
 	info.err = jpeg_std_error(&my_err.pub);
 	my_err.pub.error_exit = my_error_exit;
 
@@ -54,6 +51,7 @@ unsigned char* ReadJpeg(const char* path, int* width, int* height) {
 	int ret_Read_Head = jpeg_read_header(&info, 1); //int
 
 	if (ret_Read_Head != JPEG_HEADER_OK) {
+		LOGD("error ret_Read_Head != JPEG");
 		fclose(file);
 		jpeg_destroy_decompress(&info);
 		return NULL;
@@ -64,46 +62,41 @@ unsigned char* ReadJpeg(const char* path, int* width, int* height) {
 	int h = *height = info.output_height;
 	int numChannels = info.num_components; // 3 = RGB, 4 = RGBA
 	unsigned long dataSize = w * h * numChannels;
-
 	unsigned char *data = (unsigned char *) malloc(dataSize);
-	if (!data)
+	if (!data){
+		LOGD("malloc data = null");
 		return NULL;
+	}
 	unsigned char* rowptr;
 	while (info.output_scanline < h) {
 		rowptr = data + info.output_scanline * w * numChannels;
 		jpeg_read_scanlines(&info, &rowptr, 1);
 	}
 	jpeg_finish_decompress(&info);
-
 	fclose(file);
-
 	return data;
 }
+
+
 //读取Jpeg图片的数据并返回，如果出错，返回NULL
 unsigned char* ReadJpeg2(const char* path, int* width, int* height) {
 	FILE *file = fopen(path, "rb");
     	if (file == NULL) {
     		return NULL;
     	}
-
     	struct jpeg_decompress_struct info;
-
     	struct my_error_mgr my_err;
-
     	info.err = jpeg_std_error(&my_err.pub);
     	my_err.pub.error_exit = my_error_exit;
-
     	if (setjmp(my_err.setjmp_buffer)) {
     		printf("Error occured\n");
     		jpeg_destroy_decompress(&info);
     		fclose(file);
     		return NULL;
     	}
-
     	jpeg_create_decompress(&info); //fills info structure
     	jpeg_stdio_src(&info, file);        //void
     	int ret_Read_Head = jpeg_read_header(&info, 1); //int
-
     	if (ret_Read_Head != JPEG_HEADER_OK) {
     		printf("jpeg_read_header failed\n");
     		fclose(file);
@@ -115,15 +108,10 @@ unsigned char* ReadJpeg2(const char* path, int* width, int* height) {
     	int h = *height = info.output_height;
     	int numChannels = info.num_components; // 3 = RGB, 4 = RGBA
     	unsigned long dataSize = w * h * numChannels;
-
     	unsigned char *data = (unsigned char *) malloc(dataSize);
     	if (!data)
     		return NULL;
-
     	unsigned char* rowptr;
-    	//jpeg_skip_scanlines(&info,100);
-    	//jpeg_skip_scanlines(&info,200);
-    	//LOGD("%d",info.output_scanline);
     	while (info.output_scanline < h) {
     		rowptr = data + info.output_scanline * w * numChannels;
     		jpeg_read_scanlines(&info, &rowptr, h);
@@ -170,7 +158,6 @@ unsigned char* ReadJpeg2(const char* path, int* width, int* height) {
 				pB = pA;
 				pD = pC;
 			}
-
 			for (k = 0; k < nPixelSize; ++k) {
 				*tmp++ = (unsigned char) (int) ((B * N
 						* (*pA++ - *pB - *pC + *pD) + dw * N * *pB++
@@ -179,9 +166,7 @@ unsigned char* ReadJpeg2(const char* path, int* width, int* height) {
 			}
 		}
 	}
-
 	jpeg_finish_decompress(&info);
-
 	fclose(file);
 	return pDest;
 }
@@ -231,6 +216,7 @@ unsigned char* do_Stretch_Linear(int w_Dest, int h_Dest, int bit_depth,
 			}
 		}
 	}
+	LOGD("do_Stretch_Linear success!");
 	return pDest;
 }
 
@@ -294,29 +280,29 @@ int write_JPEG_file_android(unsigned char* data, int w, int h, int quality,
 	jpeg_stdio_dest(&jcs, f);
 	jcs.image_width = w;
 	jcs.image_height = h;
-
 	jcs.arith_code = false;
 	jcs.input_components = nComponent;
-	if (nComponent == 1)
+	if (nComponent == 1){
+		//灰度图
 		jcs.in_color_space = JCS_GRAYSCALE;
-	else
+	} else{
+		//彩色图
 		jcs.in_color_space = JCS_RGB;
+	}
 	jpeg_set_defaults(&jcs);
 	jcs.optimize_coding = optimize;
 	jpeg_set_quality(&jcs, quality, true);
-
 	jpeg_start_compress(&jcs, TRUE);
-
 	JSAMPROW row_pointer[1];
 	int row_stride;
 	row_stride = jcs.image_width * nComponent;
 	while (jcs.next_scanline < jcs.image_height) {
 		row_pointer[0] = &data[jcs.next_scanline * row_stride];
-
 		jpeg_write_scanlines(&jcs, row_pointer, 1);
 	}
 	jpeg_finish_compress(&jcs);
 	jpeg_destroy_compress(&jcs);
 	fclose(f);
+	LOGD("write_JPEG_file_android success!");
 	return 1;
 }

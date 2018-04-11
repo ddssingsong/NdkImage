@@ -184,9 +184,7 @@ int generate_image_thumbnail(const char* inputFile, const char* outputFile,
 		//缩放图片，缩放后的大小为(tb_w,tb_h)
 		buff = do_Stretch_Linear(tb_w, tb_h, 24, buff, w, h);
 	}
-
 	//将缩放后的像素数组保存到jpeg文件
-//	write_JPEG_file(outputFile, img_buf, 65, tb_h, tb_w);
 	write_JPEG_file_android(buff, tb_w, tb_h, q, outputFile, optimize);
 	free(buff);
 	return 1;

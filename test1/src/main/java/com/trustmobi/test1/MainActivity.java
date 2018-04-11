@@ -1,19 +1,23 @@
 package com.trustmobi.test1;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.ndk.AlbumUtil;
 import com.android.ndk.ImageNativeUtil;
@@ -21,6 +25,7 @@ import com.android.ndk.ImageTools;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class MainActivity extends Activity {
     private static final int PICK_IMAGE = 1;
@@ -35,7 +40,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         image = (ImageView) findViewById(R.id.image);
         text = (TextView) findViewById(R.id.text);
-
+        checkPermission();
     }
 
     public void pickImage(View view) {
@@ -108,8 +113,8 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 // 对文件进行操
-                final File file2 = new File(Environment.getExternalStorageDirectory(), "ddss.jpg");
-                long result = ImageNativeUtil.zoomcompress(file.getAbsolutePath().getBytes(), file2.getAbsolutePath().getBytes(), true, ImageTools.Quality.SMALL.getQuality());
+                final File file2 = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID() + "ddss.jpg");
+                long result = ImageNativeUtil.zoomcompress(file.getAbsolutePath().getBytes(), file2.getAbsolutePath().getBytes(), true, ImageTools.Quality.BIG.getQuality());
                 Log.i("dds", "返回结果" + result);
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -149,6 +154,23 @@ public class MainActivity extends Activity {
         }
         BigDecimal result4 = new BigDecimal(teraBytes);
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
+    }
+
+    private void checkPermission() {
+        //检查权限（NEED_PERMISSION）是否被授权 PackageManager.PERMISSION_GRANTED表示同意授权
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //用户已经拒绝过一次，再次弹出权限申请对话框需要给用户一个解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "请开通相关权限，否则无法正常使用本应用！", Toast.LENGTH_SHORT).show();
+            }
+            //申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+
+        } else {
+            Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
