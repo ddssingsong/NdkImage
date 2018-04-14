@@ -102,6 +102,7 @@ add_library( ndk-image
 find_library(log-lib log )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wall -v -Wl,--no-warn-shared-textrel")
 
 target_link_libraries( ndk-image turbojpeg jpeg png jnigraphics ${log-lib} )
 
