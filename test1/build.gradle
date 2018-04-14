@@ -29,7 +29,7 @@ android {
     }
 
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
-        commandLine "D:\\android\\android-ndk-r10b\\ndk-build.cmd",
+        commandLine "/home/dds/android/android-ndk-r11c/ndk-build",
                 'NDK_PROJECT_PATH=build/intermediates/ndk',
                 'NDK_LIBS_OUT=src/main/jniLibs',
                 'APP_BUILD_SCRIPT=src/main/jni/Android.mk',

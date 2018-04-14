@@ -1,0 +1,99 @@
+contrib/tools/png-fix-itxt.o: contrib/tools/png-fix-itxt.c \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/stdio.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/features.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/predefs.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/cdefs.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/wordsize.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/gnu/stubs.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.5.1/include/stddef.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/types.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/typesizes.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/libio.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/_G_config.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/wchar.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.5.1/include/stdarg.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/stdio_lim.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/sys_errlist.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/stdio.h \
+ /usr/local/include/zlib.h /usr/local/include/zconf.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/types.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/time.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/endian.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/endian.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/byteswap.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/select.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/select.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/sigset.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/time.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/sysmacros.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/pthreadtypes.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/unistd.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/posix_opt.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/confname.h \
+ /opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/getopt.h
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/stdio.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/features.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/predefs.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/cdefs.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/wordsize.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/gnu/stubs.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.5.1/include/stddef.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/types.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/typesizes.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/libio.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/_G_config.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/wchar.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.5.1/include/stdarg.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/stdio_lim.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/sys_errlist.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/stdio.h:
+
+/usr/local/include/zlib.h:
+
+/usr/local/include/zconf.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/types.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/time.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/endian.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/endian.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/byteswap.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/select.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/select.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/sigset.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/time.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/sys/sysmacros.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/pthreadtypes.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/unistd.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/posix_opt.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/bits/confname.h:
+
+/opt/X3/x3_linux/x3/x3_linux/lichee/buildroot/output/external-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/include/getopt.h:

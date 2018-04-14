@@ -656,7 +656,7 @@ realize_virt_arrays (j_common_ptr cinfo)
 
       space_per_minheight += (long) sptr->maxaccess *
                              (long) sptr->samplesperrow * sizeof(JSAMPLE);
-      if (SIZE_MAX - maximum_space < new_space)
+      if (4294967295U - maximum_space < new_space)
         out_of_memory(cinfo, 10);
       maximum_space += new_space;
     }
@@ -668,7 +668,7 @@ realize_virt_arrays (j_common_ptr cinfo)
 
       space_per_minheight += (long) bptr->maxaccess *
                              (long) bptr->blocksperrow * sizeof(JBLOCK);
-      if (SIZE_MAX - maximum_space < new_space)
+      if (4294967295U - maximum_space < new_space)
         out_of_memory(cinfo, 11);
       maximum_space += new_space;
     }

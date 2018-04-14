@@ -19,7 +19,7 @@ set_target_properties( jpeg
 
 include_directories(src/main/jni/jpeg)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 
 target_link_libraries( ndk-image jpeg jnigraphics ${log-lib} )

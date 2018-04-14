@@ -68,7 +68,9 @@ LOCAL_MODULE_TAGS := debug
 
 LOCAL_MODULE := libjpeg
 LOCAL_LDLIBS := -ljnigraphics -llog
+LOCAL_CFLAGS := -std=c99
 include $(BUILD_STATIC_LIBRARY)
+#include $(BUILD_SHARED_LIBRARY)
 
 ######################################################
 ###         cjpeg                                  ###

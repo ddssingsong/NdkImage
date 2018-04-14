@@ -18,6 +18,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/zlib
 
 LOCAL_LDLIBS := -ljnigraphics
 LOCAL_LDLIBS += -llog
+
 APP_ALLOW_MISSING_DEPS :=true
 
 include $(BUILD_SHARED_LIBRARY)

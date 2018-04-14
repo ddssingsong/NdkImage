@@ -1,11 +1,11 @@
 #include <jni.h>
 
-#include <math.h>
 #include <string.h>
 #include <android/bitmap.h>
 #include <android/log.h>
 #include <stdio.h>
 #include "jpeg/jpeglib.h"
+#include "../../../../../../android/android-ndk-r14b/platforms/android-19/arch-arm/usr/include/malloc.h"
 #include <setjmp.h>
 
 #define LOG_TAG "jni"
