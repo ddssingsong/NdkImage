@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NdkImage.iml" filepath="$PROJECT_DIR$/NdkImage.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test1/test1.iml" filepath="$PROJECT_DIR$/test1/test1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libpng/libpng.iml" filepath="$PROJECT_DIR$/libpng/libpng.iml" />
     </modules>
   </component>
 </project>

@@ -10,8 +10,7 @@ import android.graphics.Bitmap;
 public class LibJpegUtil {
 
     static {
-        System.loadLibrary("jpeg");
-        System.loadLibrary("ndk-image");
+
     }
 
     /**
