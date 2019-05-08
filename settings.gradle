@@ -1,1 +1,1 @@
-include ':app',':libpng'
+include ':app', ':linpng', ':libjpeg'
