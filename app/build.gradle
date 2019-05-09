@@ -4,14 +4,16 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.dds.ndkimage"
-        minSdkVersion 19
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
+                abiFilters "armeabi-v7a","x86"
                 cppFlags ""
+                arguments '-DANDROID_TOOLCHAIN=clang'
             }
         }
     }
@@ -23,7 +25,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path "src/main/cpp/CMakeLists.txt"
+            path "src/main/jni/CMakeLists.txt"
         }
     }
 }

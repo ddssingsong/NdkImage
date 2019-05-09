@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -15,9 +15,9 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
-                abiFilters "armeabi-v7a"
+                //abiFilters "armeabi-v7a"
                 arguments '-DANDROID_STL=gnustl_static'   //支持C++异常处理标准模板快
-                arguments "-DANDROID_ARM_NEON=FALSE", "-DENABLE_STATIC=TRUE"
+                arguments "-DENABLE_STATIC=TRUE"
             }
         }
     }
