@@ -90,11 +90,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             String path = Uri2PathUtil.getRealPathFromUri(this, uri);
+            // 读取图片的方向
             int degree = readPictureDegree(path);
             Log.e("dds_test", path + "get degree:" + degree);
             File file = new File(Environment.getExternalStorageDirectory(), "ssss.jpg");
             NativeImageUtils.compressBitmap(bitmap, 50, file.getAbsolutePath());
             Log.e("dds_test", "set degree:" + degree);
+            // 设置图片的方向
             setPictureDegreeZero(file.getAbsolutePath(), degree);
         } catch (Exception e) {
             e.printStackTrace();
