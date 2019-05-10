@@ -63,10 +63,11 @@ void write_JPEG_file(uint8_t *data, int w, int h, jint q, const char *path) {
     jcs.err = jpeg_std_error(&error);
     //创建压缩对象
     jpeg_create_compress(&jcs);
-    //    3.2、指定存储文件  write binary
+
+    //3.2、指定存储文件  write binary
     FILE *f = fopen(path, "wb");
     jpeg_stdio_dest(&jcs, f);
-    //    3.3、设置压缩参数
+    //3.3、设置压缩参数
     jcs.image_width = (JDIMENSION) (w);
     jcs.image_height = (JDIMENSION) h;
     //bgr
@@ -76,9 +77,9 @@ void write_JPEG_file(uint8_t *data, int w, int h, jint q, const char *path) {
     //开启哈夫曼功能
     jcs.optimize_coding = true;
     jpeg_set_quality(&jcs, q, 1);
-    //    3.4、开始压缩
+    //3.4、开始压缩
     jpeg_start_compress(&jcs, 1);
-    //    3.5、循环写入每一行数据
+    //3.5、循环写入每一行数据
     int row_stride = w * 3;//一行的字节数
     JSAMPROW row[1];
     while (jcs.next_scanline < jcs.image_height) {
