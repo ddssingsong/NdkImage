@@ -2,9 +2,9 @@
 cmake_minimum_required(VERSION 3.4.1)
 
 add_library(
-        native-image
+        native-jpeg
         SHARED
-        native-image.cpp)
+        native-jpeg.cpp)
 
 ADD_SUBDIRECTORY(libjpeg-turbo-2.0.2)
 
@@ -14,6 +14,6 @@ find_library(
         log)
 
 target_link_libraries(
-        native-image
+        native-jpeg
         jnigraphics
         ${log-lib})

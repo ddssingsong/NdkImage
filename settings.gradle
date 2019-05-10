@@ -1,2 +1,2 @@
-//include ':app', ':linpng', ':libjpeg'
-include ':app'
+include ':app', ':linpng', ':libjpeg'
+//include ':app'
