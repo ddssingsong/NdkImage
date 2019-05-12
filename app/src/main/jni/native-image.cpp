@@ -2,9 +2,23 @@
 #include <string>
 #include <android/bitmap.h>
 #include <malloc.h>
-#include "jpeglib.h"
+#include "jpegcompress.h"
+#include <android/log.h>
+#include <jpeglib.h>
 
-void write_JPEG_file(uint8_t *temp, int w, int h, jint q, const char *path);
+#define TAG    "dds_native_image"
+#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,TAG,__VA_ARGS__)
+#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,TAG,__VA_ARGS__)
+
+
+#define JPEG_FILE_TYPE          1
+#define PNG_FILE_TYPE           2
+#define BMP_FILE_TYPE           3
+#define GIF_FILE_TYPE           4
+
+jint generate_image_thumbnail(JNIEnv *pEnv, const char *input, const char *output, jint quality);
+
+int checkFileType(const unsigned char *buf);
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -12,6 +26,7 @@ Java_com_dds_ndkimage_NativeImageUtils_compressBitmap(JNIEnv *env, jclass type, 
                                                       jint q,
                                                       jstring p_) {
     if (bitmap == NULL) {
+        LOGE("bitmap is null");
         return;
     }
     const char *path = env->GetStringUTFChars(p_, 0);
@@ -47,51 +62,114 @@ Java_com_dds_ndkimage_NativeImageUtils_compressBitmap(JNIEnv *env, jclass type, 
         }
     }
     //把得到的新的图片的信息存入一个新文件 中
-    write_JPEG_file(temp, w, h, q, path);
-
+    jpegcompress::write_JPEG_file(temp, w, h, q, path);
     //释放内存
     free(temp);
     AndroidBitmap_unlockPixels(env, bitmap);
     env->ReleaseStringUTFChars(p_, path);
 }
 
-void write_JPEG_file(uint8_t *data, int w, int h, jint q, const char *path) {
-    //3.1、创建jpeg压缩对象
-    jpeg_compress_struct jcs;
-    //错误回调
-    jpeg_error_mgr error;
-    jcs.err = jpeg_std_error(&error);
-    //创建压缩对象
-    jpeg_create_compress(&jcs);
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_dds_ndkimage_NativeImageUtils_zoomCompress(JNIEnv *env, jclass type, jstring input_,
+                                                    jstring output_, jint q) {
+    const char *input = env->GetStringUTFChars(input_, 0);
+    const char *output = env->GetStringUTFChars(output_, 0);
 
-    //3.2、指定存储文件  write binary
-    FILE *f = fopen(path, "wb");
-    jpeg_stdio_dest(&jcs, f);
-    //3.3、设置压缩参数
-    jcs.image_width = (JDIMENSION) (w);
-    jcs.image_height = (JDIMENSION) h;
-    //bgr
-    jcs.input_components = 3;
-    jcs.in_color_space = JCS_RGB;
-    jpeg_set_defaults(&jcs);
-    //开启哈夫曼功能
-    jcs.optimize_coding = true;
-    jpeg_set_quality(&jcs, q, 1);
-    //3.4、开始压缩
-    jpeg_start_compress(&jcs, 1);
-    //3.5、循环写入每一行数据
-    int row_stride = w * 3;//一行的字节数
-    JSAMPROW row[1];
-    while (jcs.next_scanline < jcs.image_height) {
-        //取一行数据
-        uint8_t *pixels = data + jcs.next_scanline * row_stride;
-        row[0] = pixels;
-        jpeg_write_scanlines(&jcs, row, 1);
+    int result = generate_image_thumbnail(env, input, output, q);
+
+    env->ReleaseStringUTFChars(input_, input);
+    env->ReleaseStringUTFChars(output_, output);
+
+    return result;
+
+
+}
+
+// 压缩图片
+jint generate_image_thumbnail(JNIEnv *pEnv, const char *input, const char *output, jint quality) {
+    if (input == NULL || output == NULL) {
+        LOGE("input file or output file is null");
+        return 0;
     }
-    //    3.6、压缩完成
-    jpeg_finish_compress(&jcs);
-    //    3.7、释放jpeg对象
-    fclose(f);
-    jpeg_destroy_compress(&jcs);
+    FILE *f = fopen(input, "rb+");
+    long size = 0;
+    if (f == NULL) {
+        LOGE("file open failed!");
+        return 0;
+    } else {
+        fseek(f, 0, SEEK_END);
+        size = ftell(f);
+        LOGD("read file size:%ld", size);
 
+    }
+    int w = 0, h = 0;
+    unsigned char *buff = NULL;
+    buff = (unsigned char *) malloc(size);
+    if (buff) {
+        memset(buff, 0, size);
+    }
+    fseek(f, 0, SEEK_SET);
+    if (fread(buff, 1, size, f) != size) {
+        fclose(f);
+        free(buff);
+        LOGE("file read 4 byte failed!");
+        return 0;
+    }
+    fclose(f);
+
+    unsigned char *data = NULL;
+    int ext = checkFileType(buff);
+    switch (ext) {
+        case JPEG_FILE_TYPE: // jpeg
+            data = jpegcompress::read_JPEG_file(input, &w, &h);
+            break;
+        case PNG_FILE_TYPE:  // png
+
+            LOGD(" file type is png! ");
+
+            break;
+        case BMP_FILE_TYPE: //  bmp
+            data = jpegcompress::read_JPEG_file(input, &w, &h);
+            break;
+        case GIF_FILE_TYPE: //  gif
+            LOGD(" file type is gif! ");
+            break;
+        default:
+            data = jpegcompress::read_JPEG_file(input, &w, &h);
+            break;
+    }
+    if (data == NULL) {
+        printf("ReadJpeg Failed\n");
+        free(buff);
+        return 0;
+    }
+    jpegcompress::write_JPEG_file(data, w, h, quality, output);
+
+    free(data);
+    free(buff);
+    return 1;
+}
+
+/*
+　　通过文件头标识判断图片格式，
+　　jpg： FF, D8
+　　bmp： 42 4D
+　　gif： 47 49 46 38
+　　png： 89 50 4E 47
+*/
+int checkFileType(const unsigned char *buf) {
+    if (buf[0] == 0xFF && buf[1] == 0xd8 && buf[2] == 0xFF) {
+        return JPEG_FILE_TYPE;
+    }
+    if (buf[0] == 0x42 && buf[1] == 0x4d) {
+        return BMP_FILE_TYPE;
+    }
+    if (buf[0] == 0x47 && buf[1] == 0x49 && buf[2] == 0x46 && buf[3] == 0x38) {
+        return GIF_FILE_TYPE;
+    }
+    if (buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4e && buf[3] == 0x47) {
+        return PNG_FILE_TYPE;
+    } else
+        return 0;
 }

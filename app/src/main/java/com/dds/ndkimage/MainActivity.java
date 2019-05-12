@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.view.View;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,14 +95,30 @@ public class MainActivity extends AppCompatActivity {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             String path = Uri2PathUtil.getRealPathFromUri(this, uri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+            String mimeType = options.outMimeType;
+
+            Log.d("dds_test", "图片类型：" + mimeType);
+            Log.d("dds_test", "压缩前大小：" + getFormatSize(new File(path).length()));
+
             // 读取图片的方向
             int degree = readPictureDegree(path);
-            Log.e("dds_test", path + "get degree:" + degree);
+            Log.d("dds_test", "path:" + path);
+            Log.d("dds_test", "\n 图片方向:" + degree);
             File file = new File(Environment.getExternalStorageDirectory(), "ssss.jpg");
-            NativeImageUtils.compressBitmap(bitmap, 50, file.getAbsolutePath());
-            Log.e("dds_test", "set degree:" + degree);
-            // 设置图片的方向
-            setPictureDegreeZero(file.getAbsolutePath(), degree);
+            int result = NativeImageUtils.zoomCompress(path, file.getAbsolutePath(), 65);
+            if (result > 0) {
+                Log.d("dds_test", "压缩完大小：" + getFormatSize(file.length()));
+                // 设置图片的方向
+                setPictureDegreeZero(file.getAbsolutePath(), degree);
+
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+            } else {
+                Log.e("dds_test", "压缩失败！");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     // 设置文件的方向
     public static void setPictureDegreeZero(String path, int degree) {
         try {
+            Log.d("dds_test", "设置压缩完图片的方向:" + degree);
             ExifInterface exifInterface = new ExifInterface(path);
             if (degree == 90) {
                 exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, "6");
@@ -153,5 +172,30 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    // 格式化单位
+    private static String getFormatSize(double size) {
+        double kiloByte = size / 1024;
+        if (kiloByte < 1) {
+            return size + "Byte";
+        }
+        double megaByte = kiloByte / 1024;
+        if (megaByte < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "KB";
+        }
+        double gigaByte = megaByte / 1024;
+        if (gigaByte < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "MB";
+        }
+        double teraBytes = gigaByte / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 }

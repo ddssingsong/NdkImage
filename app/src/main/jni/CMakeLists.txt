@@ -11,7 +11,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/../../../../jniLibs/${C
 add_library( # Sets the name of the library.
         native-image
         SHARED
-        native-image.cpp)
+        native-image.cpp
+        jpegcompress.cpp
+        libjpeg_jni/turbojpeg-jni.c)
 
 add_library(libjpeg STATIC IMPORTED)
 set_target_properties(libjpeg
