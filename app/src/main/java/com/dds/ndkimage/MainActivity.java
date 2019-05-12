@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -25,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     private static final int PICK_IMAGE_KITKAT = 2;
 
+    private String resultPath;
+    private File file;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         if (!PermissionUtil.isNeedRequestPermission(this)) {
 
         }
+
+        file = new File(Environment.getExternalStorageDirectory(), "ssssss.jpg");
+        resultPath = file.getAbsolutePath();
     }
 
 
@@ -51,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void deleteImage(View view) {
+        File file = new File(resultPath);
+        if (file.exists()) {
+            file.delete();
+        }
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,17 +121,25 @@ public class MainActivity extends AppCompatActivity {
             int degree = readPictureDegree(path);
             Log.d("dds_test", "path:" + path);
             Log.d("dds_test", "\n 图片方向:" + degree);
-            File file = new File(Environment.getExternalStorageDirectory(), "ssss.jpg");
-            int result = NativeImageUtils.zoomCompress(path, file.getAbsolutePath(), 65);
-            if (result > 0) {
-                Log.d("dds_test", "压缩完大小：" + getFormatSize(file.length()));
-                // 设置图片的方向
-                setPictureDegreeZero(file.getAbsolutePath(), degree);
 
-                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
-            } else {
-                Log.e("dds_test", "压缩失败！");
-            }
+//            int result = NativeImageUtils.zoomCompress(path, resultPath, 65);
+//            if (result > 0) {
+//
+//                Log.d("dds_test", "压缩完大小：" + getFormatSize(file.length()));
+//                // 设置图片的方向
+//                setPictureDegreeZero(resultPath, degree);
+//                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+//            } else {
+//                Log.e("dds_test", "压缩失败！");
+//            }
+
+
+            NativeImageUtils.compressBitmap(bitmap, 65, resultPath);
+
+            Log.d("dds_test", "压缩完大小：" + getFormatSize(file.length()));
+            // 设置图片的方向
+            setPictureDegreeZero(resultPath, degree);
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,4 +220,48 @@ public class MainActivity extends AppCompatActivity {
         BigDecimal result4 = new BigDecimal(teraBytes);
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
+
+    // 根据路径获取bitmap对象
+    private static Bitmap getBitmap(String path) {
+        File f = new File(path);
+        if (f.exists()) {
+            try {
+                return BitmapFactory.decodeFile(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    /**
+     * 一种挺有效的方法，规避BitmapFactory.decodeStream或者decodeFile函数，使用BitmapFactory.decodeFileDescriptor
+     * @param path
+     * @return
+     */
+    public static  Bitmap readBitmapByPath(String path)   {
+        BitmapFactory.Options bfOptions=new BitmapFactory.Options();
+        bfOptions.inDither=false;
+        bfOptions.inPurgeable=true;
+        bfOptions.inInputShareable=true;
+        bfOptions.inTempStorage=new byte[32 * 1024];
+
+        File file=new File(path);
+        FileInputStream fs=null;
+        try {
+            fs = new FileInputStream(file);
+            return BitmapFactory.decodeFileDescriptor(fs.getFD(), null, bfOptions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally{
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
 }
