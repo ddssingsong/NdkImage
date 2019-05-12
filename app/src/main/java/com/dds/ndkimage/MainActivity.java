@@ -244,7 +244,6 @@ public class MainActivity extends AppCompatActivity {
         bfOptions.inPurgeable=true;
         bfOptions.inInputShareable=true;
         bfOptions.inTempStorage=new byte[32 * 1024];
-
         File file=new File(path);
         FileInputStream fs=null;
         try {

@@ -86,7 +86,7 @@ Java_com_dds_ndkimage_NativeImageUtils_zoomCompress(JNIEnv *env, jclass type, js
 
 }
 
-// 压缩图片
+// 压缩图片大小
 jint generate_image_thumbnail(JNIEnv *pEnv, const char *input, const char *output, jint quality) {
     if (input == NULL || output == NULL) {
         LOGE("input file or output file is null");
@@ -130,13 +130,13 @@ jint generate_image_thumbnail(JNIEnv *pEnv, const char *input, const char *outpu
 
             break;
         case BMP_FILE_TYPE: //  bmp
-            data = jpegcompress::read_JPEG_file(input, &w, &h);
+            LOGD(" file type is bmp! ");
             break;
         case GIF_FILE_TYPE: //  gif
             LOGD(" file type is gif! ");
             break;
         default:
-            data = jpegcompress::read_JPEG_file(input, &w, &h);
+            LOGD(" file type is other! ");
             break;
     }
     if (data == NULL) {
