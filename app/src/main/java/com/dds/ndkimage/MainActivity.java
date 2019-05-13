@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -109,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             String path = Uri2PathUtil.getRealPathFromUri(this, uri);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(path, options);
-            String mimeType = options.outMimeType;
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inJustDecodeBounds = true;
+//            BitmapFactory.decodeFile(path, options);
+//            String mimeType = options.outMimeType;
 
-            Log.d("dds_test", "图片类型：" + mimeType);
+           // Log.d("dds_test", "图片类型：" + mimeType);
             Log.d("dds_test", "压缩前大小：" + getFormatSize(new File(path).length()));
 
             // 读取图片的方向
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 
 
-            NativeImageUtils.compressBitmap(bitmap, 65, resultPath);
+            NativeImageUtils.compressBitmap(bitmap, 80, resultPath);
 
             Log.d("dds_test", "压缩完大小：" + getFormatSize(file.length()));
             // 设置图片的方向
@@ -233,26 +235,28 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
     /**
      * 一种挺有效的方法，规避BitmapFactory.decodeStream或者decodeFile函数，使用BitmapFactory.decodeFileDescriptor
+     *
      * @param path
      * @return
      */
-    public static  Bitmap readBitmapByPath(String path)   {
-        BitmapFactory.Options bfOptions=new BitmapFactory.Options();
-        bfOptions.inDither=false;
-        bfOptions.inPurgeable=true;
-        bfOptions.inInputShareable=true;
-        bfOptions.inTempStorage=new byte[32 * 1024];
-        File file=new File(path);
-        FileInputStream fs=null;
+    public static Bitmap readBitmapByPath(String path) {
+        BitmapFactory.Options bfOptions = new BitmapFactory.Options();
+        bfOptions.inDither = false;
+        bfOptions.inPurgeable = true;
+        bfOptions.inInputShareable = true;
+        bfOptions.inTempStorage = new byte[32 * 1024];
+        File file = new File(path);
+        FileInputStream fs = null;
         try {
             fs = new FileInputStream(file);
             return BitmapFactory.decodeFileDescriptor(fs.getFD(), null, bfOptions);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally{
-            if(fs!=null) {
+        } finally {
+            if (fs != null) {
                 try {
                     fs.close();
                 } catch (IOException e) {
@@ -263,4 +267,19 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+
+    private Bitmap compressImage(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        int options = 100;
+        //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while (baos.toByteArray().length / 1024 > 100) {
+            baos.reset();
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+            //每次都减少10
+            options -= 10;
+        }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        return BitmapFactory.decodeStream(isBm, null, null);
+    }
 }
